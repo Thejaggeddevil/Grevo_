@@ -47,7 +47,8 @@
 - Flutter SDK 3.10.0 or higher
 - Dart SDK 3.0.0 or higher
 - Android Studio / VS Code with Flutter extensions
-- Node.js backend server running on `http://localhost:8000`
+- Node.js 16.0+ (for the integrated mock backend)
+- NPM or Yarn package manager
 
 ### Installation
 
@@ -68,6 +69,11 @@
    # Install Flutter dependencies
    flutter pub get
       
+   # Install backend dependencies
+   cd mock-backend
+   npm install
+   cd ..
+   
    # Copy environment configuration
    copy .env.example .env
    
@@ -75,24 +81,44 @@
    notepad .env
    ```
 
-4. **Run the app**
+4. **Run the complete system**
+   
+   **Option A: Automated (Windows)**
    ```bash
-   # For development
-   flutter run
+   # Start both backend and frontend together
+   start-grevo.bat
+   ```
    
-   # For web
+   **Option B: Manual**
+   ```bash
+   # Terminal 1: Start the backend
+   cd mock-backend
+   npm start
+   
+   # Terminal 2: Start the Flutter app
    flutter run -d chrome
-   
-   # For Android (device connected)
-   flutter run
    ```
 
-### Backend Setup
+### Integrated Backend
 
-This app requires the Grevo backend server to be running. Make sure your backend is:
-- Running on `http://localhost:8000` (development)
-- Provides the required REST API endpoints
-- Supports WebSocket connections for real-time updates
+This project includes a complete mock backend server for development and testing:
+
+- **Location**: `mock-backend/` directory
+- **Technology**: Node.js + Express + Socket.IO
+- **Port**: `http://localhost:8000`
+- **Features**:
+  - REST API endpoints for energy data
+  - WebSocket support for real-time updates
+  - Mock campuses and energy data
+  - Simulated real-time energy generation
+  - CORS enabled for frontend communication
+
+**Backend Features:**
+- Multiple campus configurations
+- Real-time solar, wind, battery, and grid data simulation
+- Weather data integration
+- Automatic data updates every 30 seconds
+- RESTful API with proper error handling
 
 ## 📱 Supported Platforms
 
@@ -246,15 +272,24 @@ flutter test --coverage
 
 ### Project Structure
 ```
-lib/
-├── constants/          # App constants and configuration
-├── models/            # Data models and schemas
-├── providers/         # State management providers
-├── screens/          # UI screens and pages
-├── services/         # API, Socket, and utility services
-├── utils/            # Helper functions and formatters
-├── widgets/          # Reusable UI components
-└── main.dart         # Application entry point
+grevo_app/
+├── lib/                    # Flutter application code
+│   ├── constants/          # App constants and configuration
+│   ├── models/            # Data models and schemas
+│   ├── providers/         # State management providers
+│   ├── screens/          # UI screens and pages
+│   ├── services/         # API, Socket, and utility services
+│   ├── utils/            # Helper functions and formatters
+│   ├── widgets/          # Reusable UI components
+│   └── main.dart         # Application entry point
+├── mock-backend/           # Integrated Node.js backend
+│   ├── server.js          # Express server with Socket.IO
+│   ├── package.json       # Backend dependencies
+│   └── node_modules/      # Backend packages
+├── assets/                 # App assets and resources
+├── scripts/               # Build and utility scripts
+├── start-grevo.bat        # Windows startup script
+└── README.md              # This documentation
 ```
 
 ### Code Style

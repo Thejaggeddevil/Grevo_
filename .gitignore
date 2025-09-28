@@ -136,3 +136,11 @@ temp/
 # IDE files
 .vscode/settings.json
 .vscode/launch.json
+
+# Node.js backend
+mock-backend/node_modules/
+mock-backend/npm-debug.log*
+mock-backend/yarn-debug.log*
+mock-backend/yarn-error.log*
+mock-backend/.npm
+mock-backend/.eslintcache

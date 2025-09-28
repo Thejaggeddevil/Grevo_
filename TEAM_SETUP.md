@@ -4,8 +4,8 @@
 
 ### **Prerequisites**
 - Flutter SDK 3.10.0+ 
+- Node.js 16.0+ and NPM
 - Git installed
-- Your backend server running on `http://localhost:8000`
 
 ### **1. Clone & Setup**
 ```bash
@@ -13,11 +13,12 @@
 git clone https://github.com/Thejaggeddevil/Grevo_.git
 cd grevo_app
 
-# Quick setup (Windows)
+# Quick setup (Windows) - Sets up both frontend and backend
 setup.bat
 
 # OR Manual setup
 flutter pub get
+cd mock-backend && npm install && cd ..
 copy .env.example .env
 ```
 
@@ -29,25 +30,31 @@ winget install --id=Flutter.Flutter
 # OR download from https://flutter.dev/docs/get-started/install
 ```
 
-### **3. Run the App**
+### **3. Run the Complete System**
 ```bash
-# For development (default device)
-flutter run
+# Option A: Start everything with one command (Windows)
+start-grevo.bat
 
-# For web browser
-flutter run -d chrome
+# Option B: Manual startup
+# Terminal 1: Start backend
+cd mock-backend
+npm start
 
-# For Android (device/emulator connected)
-flutter run
-
-# For Windows desktop
-flutter run -d windows
+# Terminal 2: Start Flutter app
+flutter run -d chrome    # For web browser
+flutter run             # For default device
+flutter run -d windows  # For Windows desktop
 ```
 
 ## 🧪 **Testing Checklist**
 
-### **Backend Requirements**
-Your Node.js backend must be running with these endpoints:
+### **Integrated Backend**
+The project includes a complete Node.js backend in the `mock-backend/` folder:
+- **Technology**: Node.js + Express + Socket.IO
+- **Port**: http://localhost:8000
+- **Auto-start**: Use `start-grevo.bat` or run `npm start` manually
+
+**Available Endpoints**:
 - `GET /api/health` - Server health check
 - `GET /api/campuses` - List of energy campuses
 - `GET /api/energy-data` - Historical energy data
@@ -107,7 +114,8 @@ If your backend runs on different port, update:
    ```
 
 3. **"Connection failed"**
-   - Ensure backend is running on `http://localhost:8000`
+   - Start the backend: `cd mock-backend && npm start`
+   - Or use the startup script: `start-grevo.bat`
    - Check firewall settings
    - Verify API endpoints are responding
 
@@ -120,9 +128,17 @@ If your backend runs on different port, update:
 
 ### **Backend Connection Test**
 ```bash
-# Test if backend is responding
+# First, make sure backend is running
+cd mock-backend
+npm start
+
+# Then test if backend is responding (in another terminal)
 curl http://localhost:8000/api/health
 curl http://localhost:8000/api/campuses
+
+# Or open in browser:
+# http://localhost:8000/api/health
+# http://localhost:8000/api/campuses
 ```
 
 ## 📱 **Building for Production**

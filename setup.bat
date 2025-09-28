@@ -25,10 +25,45 @@ echo.
 echo [INFO] Running Flutter doctor...
 flutter doctor
 
-:: Install dependencies
+:: Install Flutter dependencies
 echo.
-echo [INFO] Installing dependencies...
+echo [INFO] Installing Flutter dependencies...
 flutter pub get
+
+:: Check if Node.js is installed
+echo.
+node --version >nul 2>&1
+if %errorlevel% neq 0 (
+    echo [ERROR] Node.js is not installed!
+    echo Please install Node.js from: https://nodejs.org
+    echo.
+    echo Quick install via winget:
+    echo winget install --id=OpenJS.NodeJS
+    echo.
+    pause
+    exit /b 1
+)
+
+echo [✓] Node.js is installed
+node --version
+npm --version
+
+:: Install backend dependencies
+echo.
+echo [INFO] Installing backend dependencies...
+if exist "mock-backend" (
+    cd mock-backend
+    npm install
+    if %errorlevel% neq 0 (
+        echo [ERROR] Failed to install backend dependencies!
+        pause
+        exit /b 1
+    )
+    cd ..
+    echo [✓] Backend dependencies installed
+) else (
+    echo [WARNING] mock-backend folder not found, skipping backend setup
+)
 
 :: Copy environment file if it doesn't exist
 if not exist ".env" (
@@ -45,11 +80,11 @@ echo Setup Complete!
 echo ====================================
 echo.
 echo Next steps:
-echo 1. Ensure your backend server is running on http://localhost:8000
-echo 2. Edit .env file with your configuration
-echo 3. Run: flutter run
+echo 1. Start the complete system: start-grevo.bat
+echo 2. OR manually start backend: cd mock-backend && npm start
+echo 3. OR manually start frontend: flutter run -d chrome
 echo.
-echo For web: flutter run -d chrome
-echo For Android: flutter run (with device connected)
+echo The integrated backend will run on: http://localhost:8000
+echo Edit .env file if you need custom configuration
 echo.
 pause
