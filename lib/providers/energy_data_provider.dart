@@ -2,8 +2,8 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import '../models/campus.dart';
 import '../models/energy_data.dart';
-import '../services/api_service.dart';
-import '../services/socket_service.dart';
+import '../services/services.dart';
+import '../services/socket_base.dart';
 
 class EnergyDataProvider with ChangeNotifier {
   // State variables
@@ -37,12 +37,12 @@ class EnergyDataProvider with ChangeNotifier {
   void _initializeProvider() {
     _setupSocketListeners();
     _loadCampuses();
-    socketService.connect();
+    socket.connect();
   }
 
   void _setupSocketListeners() {
     // Listen for real-time energy data updates
-    _energyDataSubscription = socketService.energyDataStream.listen(
+    _energyDataSubscription = socket.energyDataStream.listen(
       (energyData) {
         _currentEnergyData = energyData;
         
@@ -60,13 +60,13 @@ class EnergyDataProvider with ChangeNotifier {
     );
 
     // Listen for connection state changes
-    _connectionSubscription = socketService.connectionStateStream.listen(
+    _connectionSubscription = socket.connectionStateStream.listen(
       (state) {
         _isConnected = state == SocketConnectionState.connected;
         
         // Subscribe to campus data when connected
         if (_isConnected && _selectedCampus != null) {
-          socketService.subscribeToCampus(_selectedCampus!.id);
+          socket.subscribeToCampus(_selectedCampus!.id);
         }
         
         notifyListeners();
@@ -74,7 +74,7 @@ class EnergyDataProvider with ChangeNotifier {
     );
 
     // Listen for socket errors
-    _errorSubscription = socketService.errorStream.listen(
+    _errorSubscription = socket.errorStream.listen(
       (errorMessage) {
         _setError(errorMessage);
       },
@@ -95,7 +95,7 @@ class EnergyDataProvider with ChangeNotifier {
     _setLoading(true);
     
     try {
-      _campuses = await apiService.getCampuses();
+      _campuses = await api.getCampuses();
       
       // Auto-select first campus if available
       if (_campuses.isNotEmpty && _selectedCampus == null) {
@@ -120,7 +120,7 @@ class EnergyDataProvider with ChangeNotifier {
     try {
       // Unsubscribe from previous campus
       if (_selectedCampus != null) {
-        socketService.unsubscribeFromCampus(_selectedCampus!.id);
+        socket.unsubscribeFromCampus(_selectedCampus!.id);
       }
 
       // Find and set new campus
@@ -135,8 +135,8 @@ class EnergyDataProvider with ChangeNotifier {
 
       // Subscribe to new campus data
       if (_isConnected) {
-        socketService.subscribeToCampus(campusId);
-        socketService.requestLatestData(campusId);
+        socket.subscribeToCampus(campusId);
+        socket.requestLatestData(campusId);
       }
 
       // Load historical data
@@ -155,7 +155,7 @@ class EnergyDataProvider with ChangeNotifier {
       final endTime = DateTime.now();
       final startTime = endTime.subtract(const Duration(hours: 24));
       
-      final historicalData = await apiService.getEnergyData(
+      final historicalData = await api.getEnergyData(
         campusId: campusId,
         startTime: startTime,
         endTime: endTime,
@@ -187,7 +187,7 @@ class EnergyDataProvider with ChangeNotifier {
     _setLoading(true);
 
     try {
-      final data = await apiService.getEnergyData(
+      final data = await api.getEnergyData(
         campusId: targetCampusId,
         startTime: startTime,
         endTime: endTime,
@@ -214,7 +214,7 @@ class EnergyDataProvider with ChangeNotifier {
     }
 
     try {
-      return await apiService.getEnergyDataAggregated(
+      return await api.getEnergyDataAggregated(
         campusId: _selectedCampus!.id,
         startTime: startTime,
         endTime: endTime,
@@ -231,7 +231,7 @@ class EnergyDataProvider with ChangeNotifier {
     if (_selectedCampus == null) return;
 
     try {
-      final latestData = await apiService.getLatestEnergyData(_selectedCampus!.id);
+      final latestData = await api.getLatestEnergyData(_selectedCampus!.id);
       if (latestData != null) {
         _currentEnergyData = latestData;
         _addToHistoricalData(latestData);
@@ -246,11 +246,18 @@ class EnergyDataProvider with ChangeNotifier {
   // Check server connection
   Future<void> checkServerConnection() async {
     try {
-      final isHealthy = await apiService.isServerHealthy();
+      final isHealthy = await api.isServerHealthy();
       if (!isHealthy) {
         _setError('Server is not responding');
       } else {
+        // Backend is healthy. Clear error and ensure data is loaded.
         _clearError();
+        if (_campuses.isEmpty) {
+          await _loadCampuses();
+        }
+        if (_selectedCampus == null && _campuses.isNotEmpty) {
+          await selectCampus(_campuses.first.id);
+        }
       }
     } catch (e) {
       _setError('Connection error: $e');
@@ -259,7 +266,7 @@ class EnergyDataProvider with ChangeNotifier {
 
   // Reconnect socket
   void reconnectSocket() {
-    socketService.reconnect();
+    socket.reconnect();
   }
 
   // Utility methods

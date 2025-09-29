@@ -91,7 +91,7 @@ class _SplashScreenState extends State<SplashScreen>
     final theme = Theme.of(context);
     
     return Scaffold(
-      backgroundColor: theme.colorScheme.background,
+      backgroundColor: theme.colorScheme.surface,
       body: Consumer<EnergyDataProvider>(
         builder: (context, dataProvider, child) {
           return Center(
@@ -155,7 +155,7 @@ class _SplashScreenState extends State<SplashScreen>
                               'Renewable Energy Management',
                               style: TextStyle(
                                 fontSize: 16,
-                                color: theme.colorScheme.onBackground.withOpacity(0.7),
+                                color: theme.colorScheme.onSurface.withOpacity(0.7),
                                 fontWeight: FontWeight.w400,
                               ),
                             ),
@@ -189,7 +189,7 @@ class _SplashScreenState extends State<SplashScreen>
                         key: ValueKey(_getStatusText(dataProvider)),
                         style: TextStyle(
                           fontSize: 14,
-                          color: theme.colorScheme.onBackground.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withOpacity(0.6),
                           fontWeight: FontWeight.w400,
                         ),
                         textAlign: TextAlign.center,

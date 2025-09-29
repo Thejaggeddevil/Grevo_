@@ -68,8 +68,6 @@ class ThemeProvider with ChangeNotifier {
         tertiary: accentColor,
         surface: Color(0xFFFAFAFA),
         onSurface: Color(0xFF212121),
-        background: Color(0xFFFFFFFF),
-        onBackground: Color(0xFF212121),
         error: Color(0xFFD32F2F),
         onError: Colors.white,
       ),
@@ -79,10 +77,10 @@ class ThemeProvider with ChangeNotifier {
         elevation: 2,
         centerTitle: true,
       ),
-      cardTheme: CardTheme(
+      cardTheme: const CardThemeData(
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -135,8 +133,6 @@ class ThemeProvider with ChangeNotifier {
         tertiary: accentColor,
         surface: Color(0xFF1E1E1E),
         onSurface: Color(0xFFE0E0E0),
-        background: Color(0xFF121212),
-        onBackground: Color(0xFFE0E0E0),
         error: Color(0xFFCF6679),
         onError: Color(0xFF000000),
       ),
@@ -146,11 +142,11 @@ class ThemeProvider with ChangeNotifier {
         elevation: 2,
         centerTitle: true,
       ),
-      cardTheme: CardTheme(
-        color: const Color(0xFF2D2D2D),
+      cardTheme: const CardThemeData(
+        color: Color(0xFF2D2D2D),
         elevation: 4,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.all(Radius.circular(12)),
         ),
       ),
       elevatedButtonTheme: ElevatedButtonThemeData(
@@ -195,7 +191,7 @@ extension ThemeExtension on BuildContext {
   Color get secondaryColor => Theme.of(this).colorScheme.secondary;
   Color get tertiaryColor => Theme.of(this).colorScheme.tertiary;
   Color get surfaceColor => Theme.of(this).colorScheme.surface;
-  Color get backgroundColor => Theme.of(this).colorScheme.background;
+  Color get backgroundColor => Theme.of(this).colorScheme.surface;
   Color get errorColor => Theme.of(this).colorScheme.error;
   
   // Energy source specific colors

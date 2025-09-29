@@ -67,18 +67,40 @@ class Campus {
 }
 
 class Location {
+  final String address;
+  final String city;
+  final String state;
+  final String country;
+  final String zipCode;
   final Coordinates coordinates;
 
-  Location({required this.coordinates});
+  Location({
+    required this.address,
+    required this.city,
+    required this.state,
+    required this.country,
+    required this.zipCode,
+    required this.coordinates,
+  });
 
   factory Location.fromJson(Map<String, dynamic> json) {
     return Location(
+      address: json['address']?.toString() ?? '',
+      city: json['city']?.toString() ?? '',
+      state: json['state']?.toString() ?? '',
+      country: json['country']?.toString() ?? '',
+      zipCode: json['zipCode']?.toString() ?? '',
       coordinates: Coordinates.fromJson(json['coordinates'] ?? {}),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
+      'address': address,
+      'city': city,
+      'state': state,
+      'country': country,
+      'zipCode': zipCode,
       'coordinates': coordinates.toJson(),
     };
   }
@@ -137,16 +159,19 @@ class EnergySources {
 }
 
 class SolarConfig {
+  final bool enabled;
   final double capacity;
   final int panels;
 
   SolarConfig({
+    required this.enabled,
     required this.capacity,
     required this.panels,
   });
 
   factory SolarConfig.fromJson(Map<String, dynamic> json) {
     return SolarConfig(
+      enabled: json['enabled'] ?? false,
       capacity: (json['capacity'] ?? 0.0).toDouble(),
       panels: json['panels'] ?? 0,
     );
@@ -154,6 +179,7 @@ class SolarConfig {
 
   Map<String, dynamic> toJson() {
     return {
+      'enabled': enabled,
       'capacity': capacity,
       'panels': panels,
     };
@@ -161,16 +187,19 @@ class SolarConfig {
 }
 
 class WindConfig {
+  final bool enabled;
   final double capacity;
   final int turbines;
 
   WindConfig({
+    required this.enabled,
     required this.capacity,
     required this.turbines,
   });
 
   factory WindConfig.fromJson(Map<String, dynamic> json) {
     return WindConfig(
+      enabled: json['enabled'] ?? false,
       capacity: (json['capacity'] ?? 0.0).toDouble(),
       turbines: json['turbines'] ?? 0,
     );
@@ -178,6 +207,7 @@ class WindConfig {
 
   Map<String, dynamic> toJson() {
     return {
+      'enabled': enabled,
       'capacity': capacity,
       'turbines': turbines,
     };
@@ -185,18 +215,21 @@ class WindConfig {
 }
 
 class BatteryConfig {
+  final bool enabled;
   final double capacity;
-  final double maxCharge;
-  final double maxDischarge;
+  final double? maxCharge;
+  final double? maxDischarge;
 
   BatteryConfig({
+    required this.enabled,
     required this.capacity,
-    required this.maxCharge,
-    required this.maxDischarge,
+    this.maxCharge,
+    this.maxDischarge,
   });
 
   factory BatteryConfig.fromJson(Map<String, dynamic> json) {
     return BatteryConfig(
+      enabled: json['enabled'] ?? false,
       capacity: (json['capacity'] ?? 0.0).toDouble(),
       maxCharge: (json['maxCharge'] ?? 0.0).toDouble(),
       maxDischarge: (json['maxDischarge'] ?? 0.0).toDouble(),
@@ -205,9 +238,10 @@ class BatteryConfig {
 
   Map<String, dynamic> toJson() {
     return {
+      'enabled': enabled,
       'capacity': capacity,
-      'maxCharge': maxCharge,
-      'maxDischarge': maxDischarge,
+      if (maxCharge != null) 'maxCharge': maxCharge,
+      if (maxDischarge != null) 'maxDischarge': maxDischarge,
     };
   }
 }

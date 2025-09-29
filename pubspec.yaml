@@ -34,6 +34,7 @@ dependencies:
   intl: ^0.18.1
   uuid: ^4.2.1
   connectivity_plus: ^5.0.2
+  path_provider: ^2.1.2
   
   # Icons
   font_awesome_flutter: ^10.6.0

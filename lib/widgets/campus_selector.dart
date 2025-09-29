@@ -29,7 +29,7 @@ class CampusSelector extends StatelessWidget {
                 const SizedBox(height: 12),
                 
                 DropdownButtonFormField<String>(
-                  value: dataProvider.selectedCampus?.id,
+                  initialValue: dataProvider.selectedCampus?.id,
                   decoration: InputDecoration(
                     prefixIcon: const Icon(Icons.location_on),
                     hintText: 'Choose a campus to monitor',

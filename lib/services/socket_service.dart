@@ -1,16 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:socket_io_client/socket_io_client.dart' as IO;
 import '../models/energy_data.dart';
 
-enum SocketConnectionState {
-  disconnected,
-  connecting,
-  connected,
-  error,
-}
+import 'socket_base.dart';
 
-class SocketService {
+class SocketService implements SocketBase {
   static const String _serverUrl = 'http://localhost:8000';
   
   IO.Socket? _socket;
@@ -42,7 +36,7 @@ class SocketService {
 
     try {
       _socket = IO.io(_serverUrl, IO.OptionBuilder()
-          .setTransports(['websocket'])
+          .setTransports(['websocket','polling'])
           .enableAutoConnect()
           .enableReconnection()
           .setReconnectionDelay(2000)

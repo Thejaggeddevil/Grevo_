@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'api_base.dart';
 import '../models/campus.dart';
 import '../models/energy_data.dart';
 
@@ -13,7 +14,7 @@ class ApiException implements Exception {
   String toString() => 'ApiException: $message';
 }
 
-class ApiService {
+class ApiService implements ApiBase {
   static const String _baseUrl = 'http://localhost:8000';
   static const Duration _timeout = Duration(seconds: 30);
   
