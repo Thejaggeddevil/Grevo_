@@ -1,25 +1,25 @@
 import 'package:flutter/material.dart';
 
 class AppTheme {
-  // Primary Colors
-  static const Color primaryColor = Color(0xFF4CAF50); // Green
-  static const Color accentColor = Color(0xFFFFCC02); // Yellow/Gold
+  // Primary Colors - Simplified and Kid-Friendly
+  static const Color primaryColor = Color(0xFF2E7D32); // Forest Green
+  static const Color accentColor = Color(0xFF1976D2); // Bright Blue
   
-  // Surface Colors
-  static const Color backgroundColor = Color(0xFF121212); // Dark background
-  static const Color surfaceColor = Color(0xFF1E1E1E); // Card surfaces
-  static const Color cardColor = Color(0xFF2D2D2D); // Card background
+  // Surface Colors - Softer and More Approachable
+  static const Color backgroundColor = Color(0xFF1A1A1A); // Softer dark
+  static const Color surfaceColor = Color(0xFF2C2C2C); // Lighter card surfaces
+  static const Color cardColor = Color(0xFF3A3A3A); // More visible cards
   
-  // Text Colors
-  static const Color primaryTextColor = Colors.white;
-  static const Color secondaryTextColor = Color(0xFFB0B0B0);
+  // Text Colors - Better Contrast
+  static const Color primaryTextColor = Color(0xFFFFFFFF);
+  static const Color secondaryTextColor = Color(0xFFE0E0E0);
   
-  // Energy Source Colors
-  static const Color solarColor = Color(0xFFFF9800); // Orange
-  static const Color windColor = Color(0xFF03A9F4); // Light Blue
-  static const Color batteryColor = Color(0xFF4CAF50); // Green
-  static const Color gridColor = Color(0xFFF44336); // Red
-  static const Color loadColor = Color(0xFF9C27B0); // Purple
+  // Energy Source Colors - Simplified and Consistent
+  static const Color solarColor = Color(0xFFFFA726); // Friendly Orange
+  static const Color windColor = Color(0xFF42A5F5); // Sky Blue
+  static const Color batteryColor = Color(0xFF66BB6A); // Fresh Green
+  static const Color gridColor = Color(0xFFEF5350); // Soft Red
+  static const Color loadColor = Color(0xFFAB47BC); // Gentle Purple
   
   // Status Colors
   static const Color successColor = Color(0xFF4CAF50);

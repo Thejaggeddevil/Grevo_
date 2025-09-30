@@ -55,9 +55,9 @@ class ThemeProvider with ChangeNotifier {
 
   // Light theme configuration
   static ThemeData get lightTheme {
-    const primaryColor = Color(0xFF2E7D32); // Green
+    const primaryColor = Color(0xFF1B5E20); // Dark Green
     const secondaryColor = Color(0xFF4CAF50); // Light Green
-    const accentColor = Color(0xFFFFB74D); // Orange
+    const accentColor = Color(0xFF1976D2); // Blue
     
     return ThemeData(
       useMaterial3: true,
@@ -66,8 +66,8 @@ class ThemeProvider with ChangeNotifier {
         primary: primaryColor,
         secondary: secondaryColor,
         tertiary: accentColor,
-        surface: Color(0xFFFAFAFA),
-        onSurface: Color(0xFF212121),
+        surface: Colors.white,
+        onSurface: Color(0xFF1A1A1A),
         error: Color(0xFFD32F2F),
         onError: Colors.white,
       ),

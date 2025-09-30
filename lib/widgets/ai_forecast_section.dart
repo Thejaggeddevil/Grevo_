@@ -421,21 +421,146 @@ class AIForecastSection extends StatelessWidget {
                   ),
                 ),
               ),
-              TextButton(
-                onPressed: () {},
-                style: TextButton.styleFrom(
-                  foregroundColor: Colors.orange[400],
-                  padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-                ),
-                child: const Text(
-                  'View Details',
-                  style: TextStyle(fontSize: 11),
+              Builder(
+                builder: (buttonContext) => TextButton(
+                  onPressed: () => _showDetailedAlert(buttonContext),
+                  style: TextButton.styleFrom(
+                    foregroundColor: Colors.orange[400],
+                    padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  ),
+                  child: const Text(
+                    'View Details',
+                    style: TextStyle(fontSize: 11),
+                  ),
                 ),
               ),
             ],
           ),
         ),
       ],
+    );
+  }
+
+  void _showDetailedAlert(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: Row(
+          children: [
+            Icon(
+              Icons.warning_rounded,
+              color: Colors.orange[400],
+              size: 24,
+            ),
+            const SizedBox(width: 8),
+            const Text('Performance Alert Details'),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              _buildAlertDetail(
+                context,
+                'Issue Detected',
+                'Solar Panel Bank 3 is operating at 87% efficiency',
+                Icons.solar_power,
+                Colors.orange,
+              ),
+              const SizedBox(height: 16),
+              _buildAlertDetail(
+                context,
+                'Possible Causes',
+                '• Dust accumulation on panels\n• Partial shading from nearby structure\n• Minor electrical connection issue',
+                Icons.info_outline,
+                Colors.blue,
+              ),
+              const SizedBox(height: 16),
+              _buildAlertDetail(
+                context,
+                'Recommendations',
+                '1. Schedule cleaning of Panel Bank 3\n2. Check for obstructions\n3. Inspect electrical connections\n4. Monitor for 24-48 hours post-maintenance',
+                Icons.checklist,
+                Colors.green,
+              ),
+              const SizedBox(height: 16),
+              _buildAlertDetail(
+                context,
+                'Impact',
+                'Potential energy loss: ~8.2 kWh/day\nEstimated cost impact: ₹53/day',
+                Icons.trending_down,
+                Colors.red,
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Dismiss'),
+          ),
+          ElevatedButton(
+            onPressed: () {
+              Navigator.of(context).pop();
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(
+                  content: const Text('Maintenance request scheduled!'),
+                  backgroundColor: Colors.green,
+                  behavior: SnackBarBehavior.floating,
+                ),
+              );
+            },
+            style: ElevatedButton.styleFrom(
+              backgroundColor: Colors.orange[400],
+              foregroundColor: Colors.white,
+            ),
+            child: const Text('Schedule Maintenance'),
+          ),
+        ],
+      ),
+    );
+  }
+
+  Widget _buildAlertDetail(BuildContext context, String title, String content, IconData icon, Color color) {
+    return Container(
+      padding: const EdgeInsets.all(12),
+      decoration: BoxDecoration(
+        color: color.withOpacity(0.1),
+        borderRadius: BorderRadius.circular(8),
+        border: Border.all(
+          color: color.withOpacity(0.3),
+        ),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Row(
+            children: [
+              Icon(
+                icon,
+                color: color,
+                size: 20,
+              ),
+              const SizedBox(width: 8),
+              Text(
+                title,
+                style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+              ),
+            ],
+          ),
+          const SizedBox(height: 8),
+          Text(
+            content,
+            style: Theme.of(context).textTheme.bodySmall?.copyWith(
+              color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+            ),
+          ),
+        ],
+      ),
     );
   }
 }

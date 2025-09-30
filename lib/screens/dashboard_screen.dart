@@ -6,6 +6,9 @@ import '../widgets/enhanced_dashboard_cards.dart';
 import '../widgets/multi_line_energy_chart.dart';
 import '../widgets/energy_mix_pie_chart.dart';
 import '../widgets/ai_forecast_section.dart';
+import '../widgets/profile_dialog.dart';
+import '../widgets/settings_dialog.dart';
+import '../models/user_profile.dart';
 import '../theme/app_theme.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -161,14 +164,17 @@ class _DashboardScreenState extends State<DashboardScreen> {
         IconButton(
           icon: const Icon(Icons.notifications_outlined, color: Colors.white),
           onPressed: () {},
+          tooltip: 'Notifications',
         ),
         IconButton(
           icon: const Icon(Icons.settings_outlined, color: Colors.white),
-          onPressed: () => _handleMenuSelection('theme'),
+          onPressed: () => _showSettingsDialog(),
+          tooltip: 'Settings',
         ),
         IconButton(
           icon: const Icon(Icons.account_circle_outlined, color: Colors.white),
-          onPressed: () => _showAboutDialog(),
+          onPressed: () => _showProfileDialog(),
+          tooltip: 'Profile',
         ),
         const SizedBox(width: 8),
       ],
@@ -563,6 +569,24 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
   }
   
+  void _showProfileDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => const ProfileDialog(
+        user: UserProfile.defaultUser,
+      ),
+    );
+  }
+
+  void _showSettingsDialog() {
+    showDialog(
+      context: context,
+      barrierDismissible: true,
+      builder: (context) => const SettingsDialog(),
+    );
+  }
+
   void _showAboutDialog() {
     showDialog(
       context: context,
