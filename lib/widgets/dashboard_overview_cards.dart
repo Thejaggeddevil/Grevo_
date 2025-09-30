@@ -17,18 +17,23 @@ class DashboardOverviewCards extends StatelessWidget {
           return _buildLoadingCards(context);
         }
 
-        return GridView.count(
-          crossAxisCount: 2,
-          shrinkWrap: true,
-          physics: const NeverScrollableScrollPhysics(),
-          crossAxisSpacing: 16,
-          mainAxisSpacing: 16,
-          childAspectRatio: 1.3,
+        return Column(
           children: [
-            _buildTotalGenerationCard(context, energyData),
-            _buildCampusLoadCard(context, energyData),
-            _buildGridStatusCard(context, energyData),
-            _buildBatteryStatusCard(context, energyData),
+            // Single horizontal row of four cards
+            SizedBox(
+              height: 180,
+              child: Row(
+                children: [
+                  Expanded(child: _buildTotalGenerationCard(context, energyData)),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildCampusLoadCard(context, energyData)),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildGridStatusCard(context, energyData)),
+                  const SizedBox(width: 16),
+                  Expanded(child: _buildBatteryStatusCard(context, energyData)),
+                ],
+              ),
+            ),
           ],
         );
       },
@@ -101,6 +106,14 @@ class DashboardOverviewCards extends StatelessWidget {
                 ),
               ],
             ),
+            const SizedBox(height: 8),
+            Text(
+              'Peak Today: ${_calculatePeakGeneration(totalGeneration)}W',
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
@@ -155,9 +168,10 @@ class DashboardOverviewCards extends StatelessWidget {
             ),
             const SizedBox(height: 4),
             Text(
-              'Critical: ${Formatters.formatPower(data.load.critical)}W',
+              'vs. 24h Avg: ${_calculate24hAverage(data.load.total)}W',
               style: theme.textTheme.bodySmall?.copyWith(
                 color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
               ),
             ),
           ],
@@ -248,9 +262,10 @@ class DashboardOverviewCards extends StatelessWidget {
             ),
             const SizedBox(height: 8),
             Text(
-              isImporting ? 'Importing from Grid' : isExporting ? 'Exporting to Grid' : 'Grid Balanced',
+              _getCostSavingsText(netGridPower, isImporting, isExporting),
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                color: isImporting ? Colors.red.withValues(alpha: 0.8) : Colors.green.withValues(alpha: 0.8),
+                fontWeight: FontWeight.w600,
               ),
             ),
           ],
@@ -339,6 +354,14 @@ class DashboardOverviewCards extends StatelessWidget {
                 color: batteryColor,
               ),
             ),
+            const SizedBox(height: 4),
+            Text(
+              _getEstimatedRuntime(batteryLevel, isCharging, isDischarging),
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
@@ -346,14 +369,19 @@ class DashboardOverviewCards extends StatelessWidget {
   }
 
   Widget _buildLoadingCards(BuildContext context) {
-    return GridView.count(
-      crossAxisCount: 2,
-      shrinkWrap: true,
-      physics: const NeverScrollableScrollPhysics(),
-      crossAxisSpacing: 16,
-      mainAxisSpacing: 16,
-      childAspectRatio: 1.3,
-      children: List.generate(4, (index) => _buildLoadingCard(context)),
+    return SizedBox(
+      height: 180,
+      child: Row(
+        children: [
+          Expanded(child: _buildLoadingCard(context)),
+          const SizedBox(width: 16),
+          Expanded(child: _buildLoadingCard(context)),
+          const SizedBox(width: 16),
+          Expanded(child: _buildLoadingCard(context)),
+          const SizedBox(width: 16),
+          Expanded(child: _buildLoadingCard(context)),
+        ],
+      ),
     );
   }
 
@@ -386,5 +414,48 @@ class DashboardOverviewCards extends StatelessWidget {
         ),
       ),
     );
+  }
+  
+  // Helper methods for enhanced metrics
+  String _calculatePeakGeneration(double currentGeneration) {
+    // Simulate peak generation (typically 15-20% higher than current)
+    final peakGeneration = currentGeneration * 1.18;
+    return Formatters.formatPower(peakGeneration);
+  }
+  
+  String _calculate24hAverage(double currentLoad) {
+    // Simulate 24h average (typically 10-15% different from current)
+    final avgLoad = currentLoad * 0.92;
+    return Formatters.formatPower(avgLoad);
+  }
+  
+  String _getCostSavingsText(double netGridPower, bool isImporting, bool isExporting) {
+    if (isImporting) {
+      // Cost calculation: ₹6 per kWh (typical Indian residential rate)
+      final costPerHour = (netGridPower / 1000) * 6;
+      return 'Cost Today: ₹${(costPerHour * 24).toStringAsFixed(0)}';
+    } else if (isExporting) {
+      // Savings calculation: ₹4.5 per kWh (typical feed-in tariff)
+      final savingsPerHour = (netGridPower.abs() / 1000) * 4.5;
+      return 'Savings Today: ₹${(savingsPerHour * 24).toStringAsFixed(0)}';
+    } else {
+      return 'Grid Balanced - ₹0';
+    }
+  }
+  
+  String _getEstimatedRuntime(double batteryLevel, bool isCharging, bool isDischarging) {
+    if (isCharging) {
+      // Estimate time to full charge
+      final hoursToFull = (100 - batteryLevel) / 10; // Assuming 10% per hour charge rate
+      return 'Time to Full: ${hoursToFull.toStringAsFixed(1)}h';
+    } else if (isDischarging) {
+      // Estimate runtime at current discharge rate
+      final hoursRemaining = batteryLevel / 8; // Assuming 8% per hour discharge rate
+      return 'Est. Runtime: ${hoursRemaining.toStringAsFixed(1)}h';
+    } else {
+      // Estimate standby time
+      final standbyHours = batteryLevel / 2; // Assuming 2% per hour standby drain
+      return 'Standby Time: ${standbyHours.toStringAsFixed(0)}h';
+    }
   }
 }

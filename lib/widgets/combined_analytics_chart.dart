@@ -56,7 +56,6 @@ class CombinedAnalyticsChart extends StatelessWidget {
                     dotData: const FlDotData(show: false),
                   ),
                 ],
-                legendOptions: const LegendOptions(showLegends: false),
               ),
             ),
           ),
