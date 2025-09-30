@@ -36,7 +36,7 @@ class LoggingService {
       await info('LoggingService', 'Logging service initialized');
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to initialize logging service: $e');
+        debugPrint('Failed to initialize logging service: $e');
       }
     }
   }
@@ -84,13 +84,13 @@ class LoggingService {
     // Always print to console in debug mode
     if (kDebugMode) {
       if (level == LogLevel.error || level == LogLevel.fatal) {
-        print('🔴 $logMessage');
+        debugPrint('🔴 $logMessage');
       } else if (level == LogLevel.warning) {
-        print('🟡 $logMessage');
+        debugPrint('🟡 $logMessage');
       } else if (level == LogLevel.info) {
-        print('🔵 $logMessage');
+        debugPrint('🔵 $logMessage');
       } else {
-        print('⚪ $logMessage');
+        debugPrint('⚪ $logMessage');
       }
     }
 
@@ -100,7 +100,7 @@ class LoggingService {
       await _rotateLogsIfNeeded();
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to write to log file: $e');
+        debugPrint('Failed to write to log file: $e');
       }
     }
   }
@@ -115,7 +115,7 @@ class LoggingService {
       }
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to rotate logs: $e');
+        debugPrint('Failed to rotate logs: $e');
       }
     }
   }
@@ -141,7 +141,7 @@ class LoggingService {
       _logFile = File('${directory.path}/$baseName.log');
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to rotate log files: $e');
+        debugPrint('Failed to rotate log files: $e');
       }
     }
   }
@@ -162,7 +162,7 @@ class LoggingService {
           .toList();
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to get log files: $e');
+        debugPrint('Failed to get log files: $e');
       }
       return [];
     }
@@ -177,7 +177,7 @@ class LoggingService {
       return await file.readAsString();
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to read log file: $e');
+        debugPrint('Failed to read log file: $e');
       }
       return null;
     }
@@ -197,7 +197,7 @@ class LoggingService {
       await info('LoggingService', 'All log files cleared');
     } catch (e) {
       if (kDebugMode) {
-        print('Failed to clear logs: $e');
+        debugPrint('Failed to clear logs: $e');
       }
     }
   }

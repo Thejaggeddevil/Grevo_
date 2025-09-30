@@ -151,7 +151,7 @@ class EnergyOverviewCards extends StatelessWidget {
               width: double.infinity,
               height: 16,
               decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withOpacity(0.1),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
@@ -160,7 +160,7 @@ class EnergyOverviewCards extends StatelessWidget {
               width: 80,
               height: 24,
               decoration: BoxDecoration(
-                color: theme.colorScheme.onSurface.withOpacity(0.1),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                 borderRadius: BorderRadius.circular(8),
               ),
             ),
@@ -188,8 +188,8 @@ class EnergyOverviewCards extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [
-              color.withOpacity(0.1),
-              color.withOpacity(0.05),
+              color.withValues(alpha: 0.1),
+              color.withValues(alpha: 0.05),
             ],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
@@ -211,7 +211,7 @@ class EnergyOverviewCards extends StatelessWidget {
                     title,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                     ),
                     overflow: TextOverflow.ellipsis,
                   ),
@@ -231,7 +231,7 @@ class EnergyOverviewCards extends StatelessWidget {
               Text(
                 subtitle,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -258,7 +258,7 @@ class EnergyOverviewCards extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: isActive ? Border.all(color: color.withOpacity(0.3), width: 1) : null,
+          border: isActive ? Border.all(color: color.withValues(alpha: 0.3), width: 1) : null,
         ),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -268,12 +268,12 @@ class EnergyOverviewCards extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: isActive ? color.withOpacity(0.2) : theme.colorScheme.onSurface.withOpacity(0.1),
+                    color: isActive ? color.withValues(alpha: 0.2) : theme.colorScheme.onSurface.withValues(alpha: 0.1),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
                     icon,
-                    color: isActive ? color : theme.colorScheme.onSurface.withOpacity(0.4),
+                    color: isActive ? color : theme.colorScheme.onSurface.withValues(alpha: 0.4),
                     size: 20,
                   ),
                 ),
@@ -283,7 +283,7 @@ class EnergyOverviewCards extends StatelessWidget {
                     title,
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: isActive ? color : theme.colorScheme.onSurface.withOpacity(0.6),
+                      color: isActive ? color : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                     ),
                   ),
                 ),
@@ -294,7 +294,7 @@ class EnergyOverviewCards extends StatelessWidget {
               '${Formatters.formatPower(power)}W',
               style: theme.textTheme.titleLarge?.copyWith(
                 fontWeight: FontWeight.bold,
-                color: isActive ? color : theme.colorScheme.onSurface.withOpacity(0.4),
+                color: isActive ? color : theme.colorScheme.onSurface.withValues(alpha: 0.4),
               ),
             ),
             if (additionalInfo != null) ...[
@@ -302,7 +302,7 @@ class EnergyOverviewCards extends StatelessWidget {
               Text(
                 additionalInfo,
                 style: theme.textTheme.bodySmall?.copyWith(
-                  color: theme.colorScheme.onSurface.withOpacity(0.6),
+                  color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
               ),
             ],
@@ -320,7 +320,7 @@ class EnergyOverviewCards extends StatelessWidget {
     Color getStatusColor() {
       if (isCharging) return Colors.green;
       if (isDischarging) return Colors.orange;
-      return theme.colorScheme.onSurface.withOpacity(0.4);
+      return theme.colorScheme.onSurface.withValues(alpha: 0.4);
     }
     
     String getStatusText() {
@@ -336,7 +336,7 @@ class EnergyOverviewCards extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: (isCharging || isDischarging) 
-              ? Border.all(color: getStatusColor().withOpacity(0.3), width: 1) 
+              ? Border.all(color: getStatusColor().withValues(alpha: 0.3), width: 1) 
               : null,
         ),
         child: Column(
@@ -347,7 +347,7 @@ class EnergyOverviewCards extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: getStatusColor().withOpacity(0.2),
+                    color: getStatusColor().withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -375,7 +375,7 @@ class EnergyOverviewCards extends StatelessWidget {
                       Text(
                         getStatusText(),
                         style: theme.textTheme.bodySmall?.copyWith(
-                          color: theme.colorScheme.onSurface.withOpacity(0.6),
+                          color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
                         ),
                       ),
                     ],
@@ -402,7 +402,7 @@ class EnergyOverviewCards extends StatelessWidget {
                       const SizedBox(height: 4),
                       LinearProgressIndicator(
                         value: battery.soc / 100,
-                        backgroundColor: theme.colorScheme.onSurface.withOpacity(0.1),
+                        backgroundColor: theme.colorScheme.onSurface.withValues(alpha: 0.1),
                         valueColor: AlwaysStoppedAnimation<Color>(getStatusColor()),
                         minHeight: 4,
                       ),
@@ -433,7 +433,7 @@ class EnergyOverviewCards extends StatelessWidget {
     Color getStatusColor() {
       if (isExporting) return Colors.green;
       if (isImporting) return Colors.orange;
-      return theme.colorScheme.onSurface.withOpacity(0.4);
+      return theme.colorScheme.onSurface.withValues(alpha: 0.4);
     }
     
     String getStatusText() {
@@ -455,7 +455,7 @@ class EnergyOverviewCards extends StatelessWidget {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
           border: (isImporting || isExporting) 
-              ? Border.all(color: getStatusColor().withOpacity(0.3), width: 1) 
+              ? Border.all(color: getStatusColor().withValues(alpha: 0.3), width: 1) 
               : null,
         ),
         child: Column(
@@ -466,7 +466,7 @@ class EnergyOverviewCards extends StatelessWidget {
                 Container(
                   padding: const EdgeInsets.all(8),
                   decoration: BoxDecoration(
-                    color: getStatusColor().withOpacity(0.2),
+                    color: getStatusColor().withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
                   child: Icon(
@@ -503,7 +503,7 @@ class EnergyOverviewCards extends StatelessWidget {
             Text(
               getStatusText(),
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -540,14 +540,14 @@ class EnergyOverviewCards extends StatelessWidget {
           borderRadius: BorderRadius.circular(12),
           gradient: LinearGradient(
             colors: [
-              getBalanceColor().withOpacity(0.1),
-              getBalanceColor().withOpacity(0.05),
+              getBalanceColor().withValues(alpha: 0.1),
+              getBalanceColor().withValues(alpha: 0.05),
             ],
             begin: Alignment.centerLeft,
             end: Alignment.centerRight,
           ),
           border: Border.all(
-            color: getBalanceColor().withOpacity(0.3),
+            color: getBalanceColor().withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -556,7 +556,7 @@ class EnergyOverviewCards extends StatelessWidget {
             Container(
               padding: const EdgeInsets.all(12),
               decoration: BoxDecoration(
-                color: getBalanceColor().withOpacity(0.2),
+                color: getBalanceColor().withValues(alpha: 0.2),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(
@@ -574,7 +574,7 @@ class EnergyOverviewCards extends StatelessWidget {
                     'Power Balance',
                     style: theme.textTheme.titleSmall?.copyWith(
                       fontWeight: FontWeight.w600,
-                      color: theme.colorScheme.onSurface.withOpacity(0.8),
+                      color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                     ),
                   ),
                   const SizedBox(height: 4),
@@ -591,7 +591,7 @@ class EnergyOverviewCards extends StatelessWidget {
                       Container(
                         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 2),
                         decoration: BoxDecoration(
-                          color: getBalanceColor().withOpacity(0.2),
+                          color: getBalanceColor().withValues(alpha: 0.2),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(

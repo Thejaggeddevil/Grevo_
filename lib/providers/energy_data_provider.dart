@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../models/campus.dart';
 import '../models/energy_data.dart';
@@ -170,7 +171,7 @@ class EnergyDataProvider with ChangeNotifier {
       }
       
     } catch (e) {
-      print('Failed to load historical data: $e');
+      debugPrint('Failed to load historical data: $e');
       // Don't set error for historical data failure as it's not critical
     }
   }

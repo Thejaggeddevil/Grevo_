@@ -51,7 +51,7 @@ class LoggingService {
       logMessage += '\nStack trace: $stackTrace';
     }
     if (kDebugMode) {
-      print(logMessage);
+      debugPrint(logMessage);
     }
   }
 

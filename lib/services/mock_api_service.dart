@@ -89,7 +89,7 @@ class MockApiService implements ApiBase {
     final end = endTime ?? DateTime.now();
 
     // Generate data points at 5-minute intervals
-    final step = const Duration(minutes: 5);
+    const step = Duration(minutes: 5);
     final points = <EnergyData>[];
     var t = start;
     while (t.isBefore(end) && points.length < limit) {

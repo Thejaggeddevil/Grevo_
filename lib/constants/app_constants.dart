@@ -1,4 +1,5 @@
 /// App-wide constants
+library app_constants;
 
 // App Information
 class AppInfo {

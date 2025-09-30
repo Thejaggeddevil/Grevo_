@@ -1,5 +1,6 @@
 import 'dart:async';
-import 'package:socket_io_client/socket_io_client.dart' as IO;
+import 'package:flutter/foundation.dart';
+import 'package:socket_io_client/socket_io_client.dart' as io;
 import '../models/energy_data.dart';
 
 import 'socket_base.dart';
@@ -7,7 +8,7 @@ import 'socket_base.dart';
 class SocketService implements SocketBase {
   static const String _serverUrl = 'http://localhost:8000';
   
-  IO.Socket? _socket;
+  io.Socket? _socket;
   SocketConnectionState _connectionState = SocketConnectionState.disconnected;
   
   // Stream controllers for real-time data
@@ -19,14 +20,20 @@ class SocketService implements SocketBase {
       StreamController<String>.broadcast();
 
   // Getters for streams
+  @override
   Stream<EnergyData> get energyDataStream => _energyDataController.stream;
+  @override
   Stream<SocketConnectionState> get connectionStateStream => 
       _connectionStateController.stream;
+  @override
   Stream<String> get errorStream => _errorController.stream;
   
+  @override
   SocketConnectionState get connectionState => _connectionState;
+  @override
   bool get isConnected => _connectionState == SocketConnectionState.connected;
 
+  @override
   void connect() {
     if (_socket != null && _socket!.connected) {
       return; // Already connected
@@ -35,7 +42,7 @@ class SocketService implements SocketBase {
     _updateConnectionState(SocketConnectionState.connecting);
 
     try {
-      _socket = IO.io(_serverUrl, IO.OptionBuilder()
+      _socket = io.io(_serverUrl, io.OptionBuilder()
           .setTransports(['websocket','polling'])
           .enableAutoConnect()
           .enableReconnection()
@@ -57,23 +64,23 @@ class SocketService implements SocketBase {
 
     // Connection events
     _socket!.onConnect((_) {
-      print('Socket connected to $_serverUrl');
+      debugPrint('Socket connected to $_serverUrl');
       _updateConnectionState(SocketConnectionState.connected);
     });
 
     _socket!.onDisconnect((_) {
-      print('Socket disconnected from $_serverUrl');
+      debugPrint('Socket disconnected from $_serverUrl');
       _updateConnectionState(SocketConnectionState.disconnected);
     });
 
     _socket!.onConnectError((error) {
-      print('Socket connection error: $error');
+      debugPrint('Socket connection error: $error');
       _updateConnectionState(SocketConnectionState.error);
       _errorController.add('Connection error: ${error.toString()}');
     });
 
     _socket!.onError((error) {
-      print('Socket error: $error');
+      debugPrint('Socket error: $error');
       _errorController.add('Socket error: ${error.toString()}');
     });
 
@@ -83,7 +90,7 @@ class SocketService implements SocketBase {
         final energyData = EnergyData.fromJson(data);
         _energyDataController.add(energyData);
       } catch (e) {
-        print('Error parsing energy data: $e');
+        debugPrint('Error parsing energy data: $e');
         _errorController.add('Error parsing energy data: ${e.toString()}');
       }
     });
@@ -94,7 +101,7 @@ class SocketService implements SocketBase {
         final energyData = EnergyData.fromJson(data);
         _energyDataController.add(energyData);
       } catch (e) {
-        print('Error parsing campus energy data: $e');
+        debugPrint('Error parsing campus energy data: $e');
         _errorController.add('Error parsing campus energy data: ${e.toString()}');
       }
     });
@@ -106,16 +113,16 @@ class SocketService implements SocketBase {
         final message = alertData['message'] ?? 'System alert received';
         _errorController.add('System Alert: $message');
       } catch (e) {
-        print('Error parsing system alert: $e');
+        debugPrint('Error parsing system alert: $e');
       }
     });
 
     // Server status updates
     _socket!.on('server-status', (data) {
       try {
-        print('Server status update: $data');
+        debugPrint('Server status update: $data');
       } catch (e) {
-        print('Error parsing server status: $e');
+        debugPrint('Error parsing server status: $e');
       }
     });
   }
@@ -128,42 +135,47 @@ class SocketService implements SocketBase {
   }
 
   // Subscribe to energy data for a specific campus
+  @override
   void subscribeToCampus(String campusId) {
     if (_socket != null && _socket!.connected) {
       _socket!.emit('join-campus', {'campusId': campusId});
-      print('Subscribed to campus: $campusId');
+      debugPrint('Subscribed to campus: $campusId');
     } else {
       _errorController.add('Cannot subscribe: Socket not connected');
     }
   }
 
   // Unsubscribe from energy data for a specific campus
+  @override
   void unsubscribeFromCampus(String campusId) {
     if (_socket != null && _socket!.connected) {
       _socket!.emit('leave-campus', {'campusId': campusId});
-      print('Unsubscribed from campus: $campusId');
+      debugPrint('Unsubscribed from campus: $campusId');
     }
   }
 
   // Subscribe to all energy data updates
+  @override
   void subscribeToAllUpdates() {
     if (_socket != null && _socket!.connected) {
       _socket!.emit('subscribe-all', {});
-      print('Subscribed to all energy updates');
+      debugPrint('Subscribed to all energy updates');
     } else {
       _errorController.add('Cannot subscribe: Socket not connected');
     }
   }
 
   // Unsubscribe from all energy data updates
+  @override
   void unsubscribeFromAllUpdates() {
     if (_socket != null && _socket!.connected) {
       _socket!.emit('unsubscribe-all', {});
-      print('Unsubscribed from all energy updates');
+      debugPrint('Unsubscribed from all energy updates');
     }
   }
 
   // Request latest data for a campus
+  @override
   void requestLatestData(String campusId) {
     if (_socket != null && _socket!.connected) {
       _socket!.emit('get-latest-data', {'campusId': campusId});
@@ -173,24 +185,27 @@ class SocketService implements SocketBase {
   }
 
   // Send a ping to test connection
+  @override
   void ping() {
     if (_socket != null && _socket!.connected) {
       _socket!.emit('ping', {'timestamp': DateTime.now().toIso8601String()});
     }
   }
 
+  @override
   void disconnect() {
     try {
       _socket?.disconnect();
       _socket?.dispose();
       _socket = null;
       _updateConnectionState(SocketConnectionState.disconnected);
-      print('Socket disconnected and disposed');
+      debugPrint('Socket disconnected and disposed');
     } catch (e) {
-      print('Error during disconnect: $e');
+      debugPrint('Error during disconnect: $e');
     }
   }
 
+  @override
   void dispose() {
     disconnect();
     _energyDataController.close();
@@ -199,6 +214,7 @@ class SocketService implements SocketBase {
   }
 
   // Retry connection
+  @override
   void reconnect() {
     disconnect();
     Future.delayed(const Duration(seconds: 2), () {

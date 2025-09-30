@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import '../providers/energy_data_provider.dart';
 import '../providers/theme_provider.dart';
-import '../widgets/campus_selector.dart';
-import '../widgets/energy_overview_cards.dart';
-import '../widgets/energy_chart_widget.dart';
+import '../widgets/dashboard_overview_cards.dart';
+import '../widgets/combined_analytics_chart.dart';
+import '../widgets/chart_legend.dart';
+import '../widgets/system_info_footer.dart';
 import '../widgets/connection_status_widget.dart';
 
 class DashboardScreen extends StatefulWidget {
@@ -24,28 +25,71 @@ class _DashboardScreenState extends State<DashboardScreen> {
       appBar: AppBar(
         title: const Text('Grevo Dashboard'),
         actions: [
-          // Connection Status
+          // Campus Selector Dropdown
           Consumer<EnergyDataProvider>(
             builder: (context, dataProvider, child) {
-              return ConnectionStatusWidget(
-                isConnected: dataProvider.isConnected,
-                hasError: dataProvider.error != null,
-                onRetry: () => dataProvider.reconnectSocket(),
+              if (dataProvider.campuses.isEmpty) {
+                return const SizedBox.shrink();
+              }
+              return Container(
+                margin: const EdgeInsets.only(right: 16),
+                child: DropdownButtonHideUnderline(
+                  child: DropdownButton<String>(
+                    value: dataProvider.selectedCampus?.id,
+                    hint: const Text('Select Campus', style: TextStyle(color: Colors.white70)),
+                    dropdownColor: Theme.of(context).appBarTheme.backgroundColor,
+                    items: dataProvider.campuses.map((campus) {
+                      return DropdownMenuItem<String>(
+                        value: campus.id,
+                        child: Text(
+                          campus.name,
+                          style: const TextStyle(color: Colors.white),
+                        ),
+                      );
+                    }).toList(),
+                    onChanged: (value) {
+                      if (value != null) {
+                        dataProvider.selectCampus(value);
+                      }
+                    },
+                  ),
+                ),
               );
             },
           ),
           
-          // Theme Toggle
-          Consumer<ThemeProvider>(
-            builder: (context, themeProvider, child) {
-              return IconButton(
-                icon: Icon(
-                  themeProvider.isDarkMode 
-                      ? Icons.light_mode 
-                      : Icons.dark_mode,
+          // Live Status Indicator
+          Consumer<EnergyDataProvider>(
+            builder: (context, dataProvider, child) {
+              return Container(
+                margin: const EdgeInsets.only(right: 16),
+                padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                decoration: BoxDecoration(
+                  color: dataProvider.isConnected ? Colors.green : Colors.red,
+                  borderRadius: BorderRadius.circular(20),
                 ),
-                onPressed: () => themeProvider.toggleTheme(),
-                tooltip: 'Toggle theme',
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Container(
+                      width: 6,
+                      height: 6,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        shape: BoxShape.circle,
+                      ),
+                    ),
+                    const SizedBox(width: 6),
+                    Text(
+                      dataProvider.isConnected ? 'LIVE' : 'OFFLINE',
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 12,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
               );
             },
           ),
@@ -63,12 +107,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   contentPadding: EdgeInsets.zero,
                 ),
               ),
-              const PopupMenuItem(
-                value: 'settings',
-                child: ListTile(
-                  leading: Icon(Icons.settings),
-                  title: Text('Settings'),
-                  contentPadding: EdgeInsets.zero,
+              PopupMenuItem(
+                value: 'theme',
+                child: Consumer<ThemeProvider>(
+                  builder: (context, themeProvider, child) {
+                    return ListTile(
+                      leading: Icon(themeProvider.isDarkMode ? Icons.light_mode : Icons.dark_mode),
+                      title: Text(themeProvider.isDarkMode ? 'Light Theme' : 'Dark Theme'),
+                      contentPadding: EdgeInsets.zero,
+                    );
+                  }
                 ),
               ),
               const PopupMenuItem(
@@ -114,24 +162,34 @@ class _DashboardScreenState extends State<DashboardScreen> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Campus Selector
-                  const CampusSelector(),
-                  const SizedBox(height: 24),
-                  
                   // Error Banner (if any)
                   if (dataProvider.error != null)
                     _buildErrorBanner(dataProvider.error!),
                   
-                  // Energy Overview Cards
-                  const EnergyOverviewCards(),
+                  // Main Overview Section - Four large cards
+                  const DashboardOverviewCards(),
                   const SizedBox(height: 24),
                   
-                  // Energy Chart
-                  const EnergyChartWidget(),
+                  // Analytics Graph Section Header
+                  Text(
+                    'Analytics - Last 24 Hours',
+                    style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                      fontWeight: FontWeight.bold,
+                      color: Theme.of(context).colorScheme.primary,
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // Chart Legend
+                  const ChartLegend(),
+                  const SizedBox(height: 16),
+                  
+                  // Combined Analytics Chart
+                  const CombinedAnalyticsChart(),
                   const SizedBox(height: 24),
                   
-                  // Additional Information
-                  _buildAdditionalInfo(dataProvider),
+                  // System Information Footer
+                  const SystemInfoFooter(),
                 ],
               ),
             ),
@@ -206,7 +264,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Icon(
               Icons.location_off,
               size: 64,
-              color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+              color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.5),
             ),
             const SizedBox(height: 16),
             Text(
@@ -240,10 +298,10 @@ class _DashboardScreenState extends State<DashboardScreen> {
       margin: const EdgeInsets.only(bottom: 16),
       padding: const EdgeInsets.all(12),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.error.withOpacity(0.1),
+        color: Theme.of(context).colorScheme.error.withValues(alpha: 0.1),
         borderRadius: BorderRadius.circular(8),
         border: Border.all(
-          color: Theme.of(context).colorScheme.error.withOpacity(0.3),
+          color: Theme.of(context).colorScheme.error.withValues(alpha: 0.3),
         ),
       ),
       child: Row(
@@ -358,13 +416,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             Icon(
               icon,
               size: 16,
-              color: theme.colorScheme.primary.withOpacity(0.7),
+              color: theme.colorScheme.primary.withValues(alpha: 0.7),
             ),
             const SizedBox(width: 4),
             Text(
               label,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             ),
           ],
@@ -397,47 +455,38 @@ class _DashboardScreenState extends State<DashboardScreen> {
 
   void _handleMenuSelection(String value) {
     final dataProvider = Provider.of<EnergyDataProvider>(context, listen: false);
+    final themeProvider = Provider.of<ThemeProvider>(context, listen: false);
     
     switch (value) {
       case 'refresh':
         dataProvider.refreshCurrentData();
         break;
-      case 'settings':
-        _showSettingsDialog();
+      case 'theme':
+        themeProvider.toggleTheme();
         break;
       case 'about':
         _showAboutDialog();
         break;
     }
   }
-
-  void _showSettingsDialog() {
+  
+  void _showAboutDialog() {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Settings'),
-        content: const Text('Settings functionality will be implemented here.'),
+        title: const Text('About Grevo'),
+        content: const Text(
+          'Grevo is a smart, hybrid renewable energy management system for university campuses in Rajasthan, India.\n\n'
+          'The system intelligently manages power from Solar and Wind sources, battery storage, and the public grid.',
+        ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+            child: const Text('Close'),
           ),
         ],
       ),
     );
   }
 
-  void _showAboutDialog() {
-    showAboutDialog(
-      context: context,
-      applicationName: 'Grevo',
-      applicationVersion: '1.0.0',
-      applicationLegalese: '© 2024 Grevo Team',
-      children: const [
-        Text('Renewable Energy Management System'),
-        SizedBox(height: 8),
-        Text('Monitor and manage renewable energy sources in real-time.'),
-      ],
-    );
-  }
 }

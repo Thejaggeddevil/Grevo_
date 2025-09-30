@@ -22,10 +22,10 @@ class ConnectionStatusWidget extends StatelessWidget {
         margin: const EdgeInsets.only(right: 8),
         padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
         decoration: BoxDecoration(
-          color: _getStatusColor(theme).withOpacity(0.1),
+          color: _getStatusColor(theme).withValues(alpha: 0.1),
           borderRadius: BorderRadius.circular(12),
           border: Border.all(
-            color: _getStatusColor(theme).withOpacity(0.3),
+            color: _getStatusColor(theme).withValues(alpha: 0.3),
             width: 1,
           ),
         ),
@@ -70,11 +70,11 @@ class ConnectionStatusWidget extends StatelessWidget {
           width: 8,
           height: 8,
           decoration: BoxDecoration(
-            color: _getStatusColor(theme).withOpacity(value),
+            color: _getStatusColor(theme).withValues(alpha: value),
             shape: BoxShape.circle,
             boxShadow: [
               BoxShadow(
-                color: _getStatusColor(theme).withOpacity(0.3),
+                color: _getStatusColor(theme).withValues(alpha: 0.3),
                 blurRadius: 4,
                 spreadRadius: value * 2,
               ),
@@ -94,7 +94,7 @@ class ConnectionStatusWidget extends StatelessWidget {
           width: 8,
           height: 8,
           decoration: BoxDecoration(
-            color: _getStatusColor(theme).withOpacity(value),
+            color: _getStatusColor(theme).withValues(alpha: value),
             shape: BoxShape.circle,
           ),
         );
@@ -281,7 +281,7 @@ class _DetailedConnectionStatusWidgetState
       return Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: theme.colorScheme.error.withOpacity(0.1),
+          color: theme.colorScheme.error.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: Icon(
@@ -294,7 +294,7 @@ class _DetailedConnectionStatusWidgetState
       return Container(
         padding: const EdgeInsets.all(8),
         decoration: BoxDecoration(
-          color: Colors.green.withOpacity(0.1),
+          color: Colors.green.withValues(alpha: 0.1),
           shape: BoxShape.circle,
         ),
         child: const Icon(
@@ -310,12 +310,12 @@ class _DetailedConnectionStatusWidgetState
           return Container(
             padding: const EdgeInsets.all(8),
             decoration: BoxDecoration(
-              color: Colors.orange.withOpacity(0.1 * _pulseAnimation.value),
+              color: Colors.orange.withValues(alpha: 0.1 * _pulseAnimation.value),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.wifi_off,
-              color: Colors.orange.withOpacity(_pulseAnimation.value),
+              color: Colors.orange.withValues(alpha: _pulseAnimation.value),
               size: 24,
             ),
           );
@@ -339,7 +339,7 @@ class _DetailedConnectionStatusWidgetState
           size: 16,
           color: isError 
               ? theme.colorScheme.error 
-              : theme.colorScheme.onSurface.withOpacity(0.6),
+              : theme.colorScheme.onSurface.withValues(alpha: 0.6),
         ),
         const SizedBox(width: 8),
         Expanded(
@@ -351,7 +351,7 @@ class _DetailedConnectionStatusWidgetState
                   text: '$label: ',
                   style: TextStyle(
                     fontWeight: FontWeight.w500,
-                    color: theme.colorScheme.onSurface.withOpacity(0.8),
+                    color: theme.colorScheme.onSurface.withValues(alpha: 0.8),
                   ),
                 ),
                 TextSpan(
@@ -359,7 +359,7 @@ class _DetailedConnectionStatusWidgetState
                   style: TextStyle(
                     color: isError 
                         ? theme.colorScheme.error 
-                        : theme.colorScheme.onSurface.withOpacity(0.6),
+                        : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                   ),
                 ),
               ],
@@ -434,11 +434,11 @@ class ConnectionIndicatorDot extends StatelessWidget {
           width: size,
           height: size,
           decoration: BoxDecoration(
-            color: _getColor().withOpacity(value),
+            color: _getColor().withValues(alpha: value),
             shape: BoxShape.circle,
             boxShadow: isConnected && !hasError ? [
               BoxShadow(
-                color: _getColor().withOpacity(0.3),
+                color: _getColor().withValues(alpha: 0.3),
                 blurRadius: 4,
                 spreadRadius: 1,
               ),

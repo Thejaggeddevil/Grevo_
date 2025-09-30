@@ -26,6 +26,7 @@ class ApiService implements ApiBase {
   };
 
   // Campus endpoints
+  @override
   Future<List<Campus>> getCampuses() async {
     try {
       final response = await _client
@@ -50,6 +51,7 @@ class ApiService implements ApiBase {
     }
   }
 
+  @override
   Future<Campus> getCampusById(String id) async {
     try {
       final response = await _client
@@ -76,6 +78,7 @@ class ApiService implements ApiBase {
   }
 
   // Energy data endpoints
+  @override
   Future<List<EnergyData>> getEnergyData({
     String? campusId,
     DateTime? startTime,
@@ -122,6 +125,7 @@ class ApiService implements ApiBase {
     }
   }
 
+  @override
   Future<EnergyData?> getLatestEnergyData(String campusId) async {
     try {
       final response = await _client
@@ -148,6 +152,7 @@ class ApiService implements ApiBase {
   }
 
   // Historical data with aggregation
+  @override
   Future<List<Map<String, dynamic>>> getEnergyDataAggregated({
     required String campusId,
     required DateTime startTime,
@@ -186,6 +191,7 @@ class ApiService implements ApiBase {
   }
 
   // Health check
+  @override
   Future<bool> isServerHealthy() async {
     try {
       final response = await _client
@@ -202,6 +208,7 @@ class ApiService implements ApiBase {
   }
 
   // Get server status
+  @override
   Future<Map<String, dynamic>> getServerStatus() async {
     try {
       final response = await _client
@@ -225,6 +232,7 @@ class ApiService implements ApiBase {
     }
   }
 
+  @override
   void dispose() {
     _client.close();
   }

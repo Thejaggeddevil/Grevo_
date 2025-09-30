@@ -74,7 +74,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: theme.colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
             ),
           ),
           child: DropdownButtonHideUnderline(
@@ -106,7 +106,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             color: theme.colorScheme.surface,
             borderRadius: BorderRadius.circular(8),
             border: Border.all(
-              color: theme.colorScheme.outline.withOpacity(0.2),
+              color: theme.colorScheme.outline.withValues(alpha: 0.2),
             ),
           ),
           child: Row(
@@ -117,7 +117,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
                   Icons.show_chart,
                   color: _chartType == ChartType.line 
                       ? theme.colorScheme.primary 
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 onPressed: () => setState(() => _chartType = ChartType.line),
                 tooltip: 'Line Chart',
@@ -127,7 +127,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
                   Icons.bar_chart,
                   color: _chartType == ChartType.bar 
                       ? theme.colorScheme.primary 
-                      : theme.colorScheme.onSurface.withOpacity(0.6),
+                      : theme.colorScheme.onSurface.withValues(alpha: 0.6),
                 ),
                 onPressed: () => setState(() => _chartType = ChartType.bar),
                 tooltip: 'Bar Chart',
@@ -163,7 +163,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
           borderRadius: BorderRadius.circular(8),
         ),
         labelColor: Colors.white,
-        unselectedLabelColor: theme.colorScheme.onSurface.withOpacity(0.6),
+        unselectedLabelColor: theme.colorScheme.onSurface.withValues(alpha: 0.6),
       ),
     );
   }
@@ -196,7 +196,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
     if (_chartType == ChartType.line) {
       return LineChart(
         LineChartData(
-          gridData: FlGridData(show: true),
+          gridData: const FlGridData(show: true),
           titlesData: _buildTitlesData(context),
           borderData: FlBorderData(show: true),
           minX: 0,
@@ -212,10 +212,10 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
               isCurved: true,
               color: Colors.amber,
               barWidth: 3,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
-                color: Colors.amber.withOpacity(0.3),
+                color: Colors.amber.withValues(alpha: 0.3),
               ),
             ),
             // Wind line
@@ -226,10 +226,10 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
               isCurved: true,
               color: Colors.blue,
               barWidth: 3,
-              dotData: FlDotData(show: false),
+              dotData: const FlDotData(show: false),
               belowBarData: BarAreaData(
                 show: true,
-                color: Colors.blue.withOpacity(0.3),
+                color: Colors.blue.withValues(alpha: 0.3),
               ),
             ),
           ],
@@ -292,7 +292,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             dotData: FlDotData(show: false),
             belowBarData: BarAreaData(
               show: true,
-              color: Colors.orange.withOpacity(0.3),
+              color: Colors.orange.withValues(alpha: 0.3),
             ),
           ),
           // Critical load line
@@ -338,7 +338,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             dotData: FlDotData(show: false),
             belowBarData: BarAreaData(
               show: true,
-              color: Colors.green.withOpacity(0.3),
+              color: Colors.green.withValues(alpha: 0.3),
             ),
           ),
         ],
@@ -374,7 +374,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             dotData: FlDotData(show: false),
             belowBarData: BarAreaData(
               show: true,
-              color: Colors.purple.withOpacity(0.3),
+              color: Colors.purple.withValues(alpha: 0.3),
             ),
           ),
         ],
@@ -392,13 +392,13 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
           Icon(
             Icons.bar_chart,
             size: 48,
-            color: theme.colorScheme.onSurface.withOpacity(0.3),
+            color: theme.colorScheme.onSurface.withValues(alpha: 0.3),
           ),
           const SizedBox(height: 16),
           Text(
             message,
             style: theme.textTheme.bodyMedium?.copyWith(
-              color: theme.colorScheme.onSurface.withOpacity(0.6),
+              color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
             ),
           ),
           const SizedBox(height: 16),
@@ -431,7 +431,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             return Text(
               text,
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             );
           },
@@ -451,7 +451,7 @@ class _EnergyChartWidgetState extends State<EnergyChartWidget>
             return Text(
               Formatters.formatTime(timestamp),
               style: theme.textTheme.bodySmall?.copyWith(
-                color: theme.colorScheme.onSurface.withOpacity(0.6),
+                color: theme.colorScheme.onSurface.withValues(alpha: 0.6),
               ),
             );
           },
