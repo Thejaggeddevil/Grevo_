@@ -119,14 +119,15 @@ class EnhancedDashboardCards extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            AppTheme.accentColor.withAlpha(38),
-            AppTheme.accentColor.withAlpha(26),
+            const Color(0xFF1976D2).withOpacity(0.15),
+            const Color(0xFF1565C0).withOpacity(0.08),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: AppTheme.accentColor.withAlpha(77)),
+        border: Border.all(color: const Color(0xFF1976D2).withOpacity(0.3)),
+        color: Colors.white.withOpacity(0.05),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -135,7 +136,7 @@ class EnhancedDashboardCards extends StatelessWidget {
             children: [
               Icon(
                 Icons.energy_savings_leaf,
-                color: AppTheme.accentColor,
+                color: const Color(0xFF1976D2),
                 size: 28,
               ),
               const SizedBox(width: 8),
@@ -233,14 +234,15 @@ class EnhancedDashboardCards extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.purple[800]!.withAlpha(51),
-            Colors.purple[900]!.withAlpha(26),
+            const Color(0xFF7B1FA2).withOpacity(0.2),
+            const Color(0xFF6A1B9A).withOpacity(0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.purple[400]!.withAlpha(77)),
+        border: Border.all(color: const Color(0xFF9C27B0).withOpacity(0.4)),
+        color: Colors.white.withOpacity(0.05),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -249,7 +251,7 @@ class EnhancedDashboardCards extends StatelessWidget {
             children: [
               Icon(
                 Icons.electric_bolt,
-                color: Colors.purple[400],
+                color: const Color(0xFF9C27B0),
                 size: 28,
               ),
               const SizedBox(width: 8),
@@ -322,14 +324,15 @@ class EnhancedDashboardCards extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.green[800]!.withAlpha(51),
-            Colors.green[900]!.withAlpha(26),
+            const Color(0xFF2E7D32).withOpacity(0.2),
+            const Color(0xFF1B5E20).withOpacity(0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.green[400]!.withAlpha(77)),
+        border: Border.all(color: const Color(0xFF4CAF50).withOpacity(0.4)),
+        color: Colors.white.withOpacity(0.05),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -338,7 +341,7 @@ class EnhancedDashboardCards extends StatelessWidget {
             children: [
               Icon(
                 Icons.account_balance_wallet,
-                color: Colors.green[400],
+                color: const Color(0xFF4CAF50),
                 size: 28,
               ),
               const SizedBox(width: 8),
@@ -411,14 +414,15 @@ class EnhancedDashboardCards extends StatelessWidget {
       decoration: BoxDecoration(
         gradient: LinearGradient(
           colors: [
-            Colors.blue[800]!.withAlpha(51),
-            Colors.blue[900]!.withAlpha(26),
+            const Color(0xFF1565C0).withOpacity(0.2),
+            const Color(0xFF0D47A1).withOpacity(0.1),
           ],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.blue[400]!.withAlpha(77)),
+        border: Border.all(color: const Color(0xFF42A5F5).withOpacity(0.4)),
+        color: Colors.white.withOpacity(0.05),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
@@ -427,7 +431,7 @@ class EnhancedDashboardCards extends StatelessWidget {
             children: [
               Icon(
                 Icons.battery_full,
-                color: Colors.blue[400],
+                color: const Color(0xFF42A5F5),
                 size: 28,
               ),
               const SizedBox(width: 8),
